@@ -1,21 +1,33 @@
 package br.com.viniciusmarlin.library.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import br.com.viniciusmarlin.library.dto.UserDTO;
+import br.com.viniciusmarlin.library.model.UserModel;
+import br.com.viniciusmarlin.library.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    // Injeção de dependência do UserService
+    public final UserService userService;
 
-    @PostMapping("/create")
-    public String createUser() {
-        return "Create user";
+    // Construtor para injetar o UserService
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
+    // Endpoint para registrar um novo usuário
+    @PostMapping("/register")
+    public ResponseEntity<UserModel> register(@RequestBody UserDTO.RegisterUserDTO dto) {
+        var user = userService.register(dto);
+        return ResponseEntity.ok(user);
+    }
+
+    // Endpoint para login de usuário
     @GetMapping("/login")
-    public String loginUser() {
-        return "Login user";
+    public ResponseEntity<UserModel> login(@RequestParam String email, @RequestParam String password) {
+        var userLogged = userService.login(email, password);
+        return ResponseEntity.ok(userLogged);
     }
 }

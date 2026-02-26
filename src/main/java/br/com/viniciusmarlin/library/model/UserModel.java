@@ -6,9 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 //import org.hibernate.annotations.CreationTimestamp;
 
 //import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,12 +24,12 @@ public class UserModel {
 
     private String name;
     private String email;
-    //private String password;
+    private String password;
 
-    //@CreationTimestamp
-    //private LocalDateTime createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    //private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user")
     private List<LoanModel> loans;
