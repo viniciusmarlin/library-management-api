@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     // Injeção de dependência do UserService
     public final UserService userService;
 
@@ -25,9 +26,20 @@ public class UserController {
     }
 
     // Endpoint para login de usuário
-    @GetMapping("/login")
-    public ResponseEntity<UserModel> login(@RequestParam String email, @RequestParam String password) {
-        var userLogged = userService.login(email, password);
-        return ResponseEntity.ok(userLogged);
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO.UserResponseDTO> login(
+            @RequestBody UserDTO.LoginUserDTO dto) {
+
+        var userLogged = userService.login(
+                dto.email(),
+                dto.password()
+        );
+
+        var response = new UserDTO.UserResponseDTO(
+                userLogged.getId(),
+                userLogged.getName(),
+                userLogged.getEmail()
+        );
+        return ResponseEntity.ok(response);
     }
 }
