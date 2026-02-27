@@ -6,6 +6,15 @@ import br.com.viniciusmarlin.library.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
+/*
+ * A camada de serviço é responsável por conter a lógica de negócio da aplicação.
+ * Ela atua como uma ponte entre os controladores (que lidam com as requisições HTTP)
+ * e os repositórios (que lidam com a persistência de dados).
+ *
+ * O serviço de usuários (UserService) é responsável por gerenciar as operações relacionadas aos usuários,
+ * como registrar um novo usuário, realizar login, etc.
+ */
+
 @Service
 public class UserService {
 

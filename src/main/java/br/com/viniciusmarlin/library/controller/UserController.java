@@ -17,7 +17,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
     // Endpoint para registrar um novo usuário
     @PostMapping("/register")
     public ResponseEntity<UserModel> register(@RequestBody UserDTO.RegisterUserDTO dto) {
