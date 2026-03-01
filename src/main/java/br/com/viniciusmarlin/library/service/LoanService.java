@@ -40,8 +40,8 @@ public class LoanService {
     }
 
 
-    private LoanDTO.LoanResponseDTO toDTO(LoanModel loan) {
-        return new LoanDTO.LoanResponseDTO(
+    private LoanDTO.CreateLoanDTO toDTO(LoanModel loan) {
+        return new LoanDTO.CreateLoanDTO(
                 loan.getId(),
                 loan.getUser().getId(),
                 loan.getBook().getId(),
@@ -133,7 +133,7 @@ public class LoanService {
     }
 
     @Transactional
-    public List<LoanDTO.LoanResponseDTO> findLateLoansByUser(UUID userId) {
+    public List<LoanDTO.CreateLoanDTO> findLateLoansByUser(UUID userId) {
         return loanRepository.findByUserIdAndStatus(userId, LoanStatus.LATE)
                 .stream()
                 .filter(LoanModel::isLate)

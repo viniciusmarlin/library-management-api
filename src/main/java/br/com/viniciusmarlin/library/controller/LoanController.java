@@ -52,7 +52,7 @@ public class LoanController {
     }
 
     @GetMapping("/user/{userId}/late")
-    public List<LoanDTO.LoanResponseDTO> listAllLate(@PathVariable UUID userId) {
+    public List<LoanDTO.CreateLoanDTO> listAllLate(@PathVariable UUID userId) {
         return loanService.findLateLoansByUser(userId);
     }
 }

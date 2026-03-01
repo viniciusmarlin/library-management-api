@@ -12,18 +12,18 @@ import java.util.UUID;
 public class LoanDTO {
     // DTO para criar um empréstimo
     public record CreateLoanDTO(
-            String userId,
-            String bookId
+            UUID id,
+            UUID userId,
+            UUID bookId,
+            LocalDateTime loanDate,
+            LocalDateTime returnDate
     ) {
     }
 
     // DTO para resposta de empréstimo
      public record LoanResponseDTO(
-             UUID id,
-             UUID userId,
-             UUID bookId,
-             LocalDateTime loanDate,
-             LocalDateTime returnDate
+            String userId,
+            String bookId
      ) {
      }
 }
