@@ -1,16 +1,14 @@
 package br.com.viniciusmarlin.library.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 //import org.hibernate.annotations.CreationTimestamp;
 
 //import java.time.LocalDateTime;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +29,6 @@ public class UserModel {
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<LoanModel> loans;
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<LoanModel> loans = new ArrayList<>();
 }
