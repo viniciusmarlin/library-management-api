@@ -21,9 +21,9 @@ public class LoanDTO {
     }
 
     // DTO para resposta de empréstimo
-     public record LoanResponseDTO(
-            String userId,
-            String bookId
-     ) {
-     }
+//     public record LoanResponseDTO(
+//            String userId,
+//            String bookId
+//     ) {
+//     }
 }
