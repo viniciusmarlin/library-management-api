@@ -56,11 +56,8 @@ public class BookService {
 
     // Listar apenas os livros disponíveis
     public List<BookDTO.CreateBookDTO> searchAvailableBooks() {
-
-        // Buscar apenas os livros disponíveis no banco de dados e mapear para DTOs
         return bookRepository.findByIsAvailableTrue()
                 .stream()
-                .filter(BookModel::isAvailable) // só os disponíveis
                 .map(book -> new BookDTO.CreateBookDTO(
                         book.getId(),
                         book.getTitle(),
@@ -70,15 +67,25 @@ public class BookService {
     }
 
     // Buscar um livro por ID
-    public BookModel searchById(UUID id) {
-        // Buscar um livro pelo ID no banco de dados, lançando uma exceção se não for encontrado
+    public BookDTO.CreateBookDTO searchById(UUID id) {
+        BookModel book = findEntityById(id);
+
+        return new BookDTO.CreateBookDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor()
+        );
+    }
+
+
+    private BookModel findEntityById(UUID id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
     }
 
     // Deletar um livro por ID
     public void deleteById(UUID id) {
-        BookModel book = searchById(id);
+        BookModel book = findEntityById(id);
         bookRepository.delete(book);
     }
 

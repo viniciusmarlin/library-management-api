@@ -19,6 +19,7 @@ public class BookDTO {
 
     // DTO para resposta de livro (sem informações sensíveis)
     public record ResponseBookDTO(
+            UUID id,
             String title,
             String author
     ) {}

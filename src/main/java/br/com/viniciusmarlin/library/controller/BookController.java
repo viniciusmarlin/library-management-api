@@ -39,6 +39,7 @@ public class BookController {
 
         List<BookDTO.ResponseBookDTO> bookDTOs = createBookDTOs.stream()
                 .map(create -> new BookDTO.ResponseBookDTO(
+                        create.id(),
                         create.title(),
                         create.author()
                 ))
@@ -55,6 +56,7 @@ public class BookController {
 
         List<BookDTO.ResponseBookDTO> bookDTOs = createBookDTOs.stream()
                 .map(create -> new BookDTO.ResponseBookDTO(
+                        create.id(),
                         create.title(),
                         create.author()
                 ))
@@ -66,9 +68,10 @@ public class BookController {
     //User
     // Buscar um livro por ID
     @GetMapping("/{id}")
-    public ResponseEntity<BookModel> getById(@PathVariable UUID id) {
+    public ResponseEntity<BookDTO.CreateBookDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(bookService.searchById(id));
     }
+
 
     // Admin
     // Deletar um livro por ID
