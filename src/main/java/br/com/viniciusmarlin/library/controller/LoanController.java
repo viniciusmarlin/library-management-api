@@ -42,12 +42,12 @@ public class LoanController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<LoanDTO.LoanResponseDTO> listAll(@PathVariable UUID userId) {
+    public List<LoanDTO.CreateLoanDTO> listAll(@PathVariable UUID userId) {
         return loanService.findLoansByUser(userId);
     }
 
     @GetMapping("/user/{userId}/active")
-    public List<LoanDTO.LoanResponseDTO> listAllActive(@PathVariable UUID userId) {
+    public List<LoanDTO.CreateLoanDTO> listAllActive(@PathVariable UUID userId) {
         return loanService.findActiveLoansByUser(userId);
     }
 

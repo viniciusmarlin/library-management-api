@@ -116,7 +116,7 @@ public class LoanService {
     }
 
     @Transactional
-    public List<LoanDTO.LoanResponseDTO> findLoansByUser(UUID userId) {
+    public List<LoanDTO.CreateLoanDTO> findLoansByUser(UUID userId) {
         return loanRepository.findByUserId(userId)
                 .stream()
                 .map(this::toDTO)
@@ -124,7 +124,7 @@ public class LoanService {
     }
 
     @Transactional
-    public List<LoanDTO.LoanResponseDTO> findActiveLoansByUser(UUID userId) {
+    public List<LoanDTO.CreateLoanDTO> findActiveLoansByUser(UUID userId) {
         return loanRepository.findByUserIdAndStatus(userId, LoanStatus.ACTIVE)
                 .stream()
                 .filter(LoanModel::isActive)
