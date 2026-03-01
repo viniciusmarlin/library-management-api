@@ -51,33 +51,7 @@ public class LoanService {
     }
 
     @Transactional
-    public List<LoanDTO.LoanResponseDTO> findLoansByUser(UUID userId) {
-        return loanRepository.findByUserId(userId)
-                .stream()
-                .map(this::toDTO)
-                .toList();
-    }
-
-    @Transactional
-    public List<LoanDTO.LoanResponseDTO> findActiveLoansByUser(UUID userId) {
-        return loanRepository.findByUserIdAndStatus(userId, LoanStatus.ACTIVE)
-                .stream()
-                .filter(LoanModel::isActive)
-                .map(this::toDTO)
-                .toList();
-    }
-
-    @Transactional
-    public List<LoanDTO.LoanResponseDTO> findLateLoansByUser(UUID userId) {
-        return loanRepository.findByUserIdAndStatus(userId, LoanStatus.LATE)
-                .stream()
-                .filter(LoanModel::isLate)
-                .map(this::toDTO)
-                .toList();
-    }
-
-    @Transactional
-    public LoanDTO.LoanResponseDTO createLoan(UUID userId, UUID bookId) {
+    public LoanDTO.CreateLoanDTO createLoan(UUID userId, UUID bookId) {
         UserModel user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -139,5 +113,31 @@ public class LoanService {
         loan.setStatus(LoanStatus.RETURNED);
         book.setAvailable(true);
         bookRepository.save(book);
+    }
+
+    @Transactional
+    public List<LoanDTO.LoanResponseDTO> findLoansByUser(UUID userId) {
+        return loanRepository.findByUserId(userId)
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional
+    public List<LoanDTO.LoanResponseDTO> findActiveLoansByUser(UUID userId) {
+        return loanRepository.findByUserIdAndStatus(userId, LoanStatus.ACTIVE)
+                .stream()
+                .filter(LoanModel::isActive)
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional
+    public List<LoanDTO.LoanResponseDTO> findLateLoansByUser(UUID userId) {
+        return loanRepository.findByUserIdAndStatus(userId, LoanStatus.LATE)
+                .stream()
+                .filter(LoanModel::isLate)
+                .map(this::toDTO)
+                .toList();
     }
 }

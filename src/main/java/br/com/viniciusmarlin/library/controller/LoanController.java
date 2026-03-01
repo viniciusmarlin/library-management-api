@@ -1,6 +1,5 @@
 package br.com.viniciusmarlin.library.controller;
 
-import br.com.viniciusmarlin.library.dto.BookDTO;
 import br.com.viniciusmarlin.library.dto.LoanDTO;
 import br.com.viniciusmarlin.library.service.LoanService;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,12 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<LoanDTO.LoanResponseDTO> createLoan(
+    public ResponseEntity<LoanDTO.CreateLoanDTO> createLoan(
             @RequestParam UUID userId,
             @RequestParam UUID bookId
     ) {
 
-        LoanDTO.LoanResponseDTO response =
+        LoanDTO.CreateLoanDTO response =
                 loanService.createLoan(userId, bookId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
