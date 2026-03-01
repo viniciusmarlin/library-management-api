@@ -7,23 +7,41 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Entity
+@Entity(name = "loans")
 public class LoanModel {
 
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserModel user;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", nullable = false)
     private BookModel book;
 
     private LocalDateTime loanDate;
 
     private LocalDateTime returnDate;
+
+    private LocalDateTime dueDate;
+
+    @Enumerated(EnumType.STRING)
+    private LoanStatus status;
+
+    public boolean isActive() {
+        return this.status == LoanStatus.ACTIVE;
+    }
+
+    public boolean isReturned() {
+        return this.status == LoanStatus.RETURNED;
+    }
+
+    public boolean isLate() {
+        return this.status == LoanStatus.ACTIVE &&
+                LocalDateTime.now().isAfter(this.dueDate);
+    }
 
 }

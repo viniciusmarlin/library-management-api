@@ -6,6 +6,9 @@ package br.com.viniciusmarlin.library.dto;
  * especialmente em operações como registro e login de usuários.
  */
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 public class LoanDTO {
     // DTO para criar um empréstimo
     public record CreateLoanDTO(
@@ -16,11 +19,11 @@ public class LoanDTO {
 
     // DTO para resposta de empréstimo
      public record LoanResponseDTO(
-             String id,
-             String userId,
-             String bookId,
-             String loanDate,
-             String returnDate
+             UUID id,
+             UUID userId,
+             UUID bookId,
+             LocalDateTime loanDate,
+             LocalDateTime returnDate
      ) {
      }
 }
