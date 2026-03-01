@@ -81,4 +81,20 @@ public class BookService {
         BookModel book = searchById(id);
         bookRepository.delete(book);
     }
+
+    public BookDTO.updateBookDTO updateBook(UUID id, BookDTO.updateBookDTO dto) {
+        BookModel book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+
+        book.setTitle(dto.title());
+        book.setAuthor(dto.author());
+        book.setAvailable(dto.isAvailable());
+        bookRepository.save(book);
+
+        return new BookDTO.updateBookDTO(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.isAvailable()
+        );
+    }
 }

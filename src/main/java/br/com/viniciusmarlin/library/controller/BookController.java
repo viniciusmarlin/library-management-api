@@ -87,7 +87,10 @@ public class BookController {
                     .body("Erro ao deletar o livro: " + e.getMessage());
         }
     }
+    // Admin
+    // Atualizar um livro por ID
+    @PutMapping("/update/{id}")
+    public ResponseEntity<BookDTO.updateBookDTO> updateBooks(@PathVariable UUID id, @RequestBody BookDTO.updateBookDTO data) {
+        return ResponseEntity.ok(bookService.updateBook(id, data));
+    }
 }
-
-
-// update book

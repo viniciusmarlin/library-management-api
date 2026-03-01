@@ -22,5 +22,12 @@ public class BookDTO {
             String title,
             String author
     ) {}
+
+    public record updateBookDTO(
+            UUID id,
+            String title,
+            String author,
+            Boolean isAvailable
+    ) {}
 }
 
