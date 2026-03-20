@@ -115,6 +115,25 @@ public class LoanService {
         bookRepository.save(book);
     }
 
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void updateLateLoans() {
+
+        System.out.println("Scheduler rodando...");
+
+        List<LoanModel> lateLoans =
+                loanRepository.findByStatusAndDueDateBefore(
+                        LoanStatus.ACTIVE,
+                        LocalDateTime.now()
+                );
+
+        for (LoanModel loan : lateLoans) {
+            loan.setStatus(LoanStatus.LATE);
+        }
+
+        loanRepository.saveAll(lateLoans);
+    }
+
     @Transactional
     public List<LoanDTO.CreateLoanDTO> findLoansByUser(UUID userId) {
         return loanRepository.findByUserId(userId)
