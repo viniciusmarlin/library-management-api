@@ -31,6 +31,11 @@ public class UserService {
 
         // Verificar se o email já está registrado
         UserModel user = new UserModel();
+
+        if (userRepository.existsByEmail(dto.email())) {
+            throw new BusinessException("Email already registered");
+        }
+
         user.setName(dto.name());
         user.setEmail(dto.email());
 
