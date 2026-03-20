@@ -1,6 +1,8 @@
 package br.com.viniciusmarlin.library.service;
 
 import br.com.viniciusmarlin.library.dto.UserDTO;
+import br.com.viniciusmarlin.library.exception.BusinessException;
+import br.com.viniciusmarlin.library.exception.UserNotFoundException;
 import br.com.viniciusmarlin.library.model.UserModel;
 import br.com.viniciusmarlin.library.repository.IUserRepository;
 import org.springframework.stereotype.Service;
@@ -52,14 +54,14 @@ public class UserService {
 
         // Buscar o usuário pelo email
         var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
 
         var result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword()); // Verificar a senha usando BCrypt
 
         // Se a senha não for válida, lançar uma exceção
         if(!result.verified) {
-            throw new RuntimeException("Senha incorreta");
+            throw new BusinessException("Senha incorreta");
         }
         return user; // Se a senha for válida, retornar o usuário
     }
