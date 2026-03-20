@@ -1,7 +1,7 @@
 package br.com.viniciusmarlin.library.service;
 
 import br.com.viniciusmarlin.library.dto.LoanDTO;
-import br.com.viniciusmarlin.library.exception.BusinessException;
+import br.com.viniciusmarlin.library.exception.*;
 import br.com.viniciusmarlin.library.model.BookModel;
 import br.com.viniciusmarlin.library.model.LoanModel;
 import br.com.viniciusmarlin.library.model.LoanStatus;
@@ -10,6 +10,7 @@ import br.com.viniciusmarlin.library.repository.IBookRepository;
 import br.com.viniciusmarlin.library.repository.ILoanRepository;
 import br.com.viniciusmarlin.library.repository.IUserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,10 +54,10 @@ public class LoanService {
     @Transactional
     public LoanDTO.CreateLoanDTO createLoan(UUID userId, UUID bookId) {
         UserModel user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         BookModel book = bookRepository.findById(bookId)
-            .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+            .orElseThrow(() -> new LoanNotFoundException("Loan not found"));
 
 
 
@@ -70,14 +71,14 @@ public class LoanService {
         boolean alreadyLoaned = loanRepository.existsByUserAndBookAndStatus(user, book, LoanStatus.ACTIVE);
 
         if (alreadyLoaned) {
-            throw new RuntimeException("Usuário já possui este livro emprestado");
+            throw new UserAlreadyHasActiveLoanException("Usuário já possui este livro emprestado");
         }
 
         LoanModel loan = new LoanModel();
             loan.setUser(user);
             loan.setBook(book);
             loan.setLoanDate(LocalDateTime.now());
-            loan.setDueDate(LocalDateTime.now().plusDays(7));
+        loan.setDueDate(LocalDateTime.now().minusMinutes(1));
             loan.setStatus(LoanStatus.ACTIVE);
 
 
@@ -90,28 +91,27 @@ public class LoanService {
     public LoanModel findLoan(UUID loanId) {
         // Buscar um livro pelo ID no banco de dados, lançando uma exceção se não for encontrado
         return loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
     }
 
     @Transactional
     public void returnLoan(UUID loanId, UUID bookId) {
 
         BookModel book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+                .orElseThrow(() -> new BookNotFoundException("Livro não encontrado"));
 
         LoanModel loan = findLoan(loanId);
 
-        if (!loan.isActive()) {
+        if (!loan.isActive() && !loan.isLate()) {
             throw new BusinessException("Loan already closed");
-        }
-
-        if(LocalDateTime.now().isAfter(loan.getDueDate())) {
-            loan.setStatus(LoanStatus.LATE);
         }
 
         loan.setReturnDate(LocalDateTime.now());
         loan.setStatus(LoanStatus.RETURNED);
+
         book.setAvailable(true);
+
+        loanRepository.save(loan);
         bookRepository.save(book);
     }
 
@@ -146,7 +146,6 @@ public class LoanService {
     public List<LoanDTO.CreateLoanDTO> findActiveLoansByUser(UUID userId) {
         return loanRepository.findByUserIdAndStatus(userId, LoanStatus.ACTIVE)
                 .stream()
-                .filter(LoanModel::isActive)
                 .map(this::toDTO)
                 .toList();
     }
@@ -155,7 +154,6 @@ public class LoanService {
     public List<LoanDTO.CreateLoanDTO> findLateLoansByUser(UUID userId) {
         return loanRepository.findByUserIdAndStatus(userId, LoanStatus.LATE)
                 .stream()
-                .filter(LoanModel::isLate)
                 .map(this::toDTO)
                 .toList();
     }
