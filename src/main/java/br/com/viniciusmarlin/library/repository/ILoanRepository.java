@@ -27,4 +27,8 @@ public interface ILoanRepository extends JpaRepository<LoanModel, UUID> {
             BookModel book, LoanStatus status
     );
 
+    List<LoanModel> findByStatusAndDueDateBefore(
+            LoanStatus status,
+            LocalDateTime dateTime
+    );
 }
