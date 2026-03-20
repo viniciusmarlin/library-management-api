@@ -1,6 +1,7 @@
 package br.com.viniciusmarlin.library.service;
 
 import br.com.viniciusmarlin.library.dto.BookDTO;
+import br.com.viniciusmarlin.library.exception.BookNotFoundException;
 import br.com.viniciusmarlin.library.model.BookModel;
 import br.com.viniciusmarlin.library.repository.IBookRepository;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class BookService {
 
     private BookModel findEntityById(UUID id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found"));
     }
 
     // Deletar um livro por ID
@@ -90,7 +91,7 @@ public class BookService {
     }
 
     public BookDTO.updateBookDTO updateBook(UUID id, BookDTO.updateBookDTO dto) {
-        BookModel book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        BookModel book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book not found"));
 
         book.setTitle(dto.title());
         book.setAuthor(dto.author());

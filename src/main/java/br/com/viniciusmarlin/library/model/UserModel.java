@@ -4,9 +4,6 @@ package br.com.viniciusmarlin.library.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-//import org.hibernate.annotations.CreationTimestamp;
-
-//import java.time.LocalDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
